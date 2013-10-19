@@ -1,52 +1,52 @@
-= DESCRIPTION:
+# Description
 
 Installs the Drush CLI tool for Drupal, either via PEAR package or directly from source via Git.
 Also included is a recipe that can be used to install drush_make via the `drush pm-download` command.
 
-= REQUIREMENTS:
+# Requirements
 
 * Opscode's php cookbook - http://community.opscode.com/cookbooks/php/
 
-= PLATFORMS:
+# Platforms
 
-The following platforms are supported by this cookbook, meaning that the 
+The following platforms are supported by this cookbook, meaning that the
 recipes run on these platforms without error.
 
 * Debian
 * Ubuntu
 * CentOS
 
-= RECIPES:
+# Recipes
 
-== default:
+## default
 
 Installs drush using the desired `install_method` recipe, and
 also includes minor recipes to meet dependencies.
 
-== pear:
+## pear
 
 Installs drush via PEAR package manager.
 
-== git:
+## git
 
 Install drush via Git from source repository.
 
-== upgrade_pear:
+## upgrade_pear
 
 Upgrades PEAR to v1.9.1, which meets minimum required by drush via PEAR.
 
-== install_console_table:
+## install_console_table
 
 Installs PEAR Console_Table extension dependency.
 
-== make:
+## make
 
 Executes a drush command to install drush_make.  If the `drush make` command
 is already available, this command will not be run.
 
-= ATTRIBUTES:
+# Attributes
 
-== default:
+## default
 
 * `node['drush']['install_method']` - Indicates the desired install method, currently either `git` or `pear`.
 * `node['drush']['version']` - Drush preferred state (stable, beta, devel) or version of format x.y.z when install_method is pear (eg. 5.0.0).
@@ -55,7 +55,17 @@ When install_method is git, the format is a git reference commit/tag/branch (eg.
 * `node['drush']['make']['version']` - Drush Make version of format x.y
 * `node['drush']['install_dir']` - Where to install Drush via Git. Used to install Drush Make as well.
 
-= USAGE:
+# LWRPs
+
+## drush_make
+
+Turns a makefile into a Drupal codebase. Supports `build_path` and `makefile` parameters. More to come.
+
+    drush_make /var/www/html/drupal do
+      makefile http://www.github.com/blah/makefile.make
+    end
+
+# Usage
 
 Simply include the `drush` or `drush::make` recipe wherever you would
 like drush installed. You may alter the `install_method` and `version`
