@@ -1,9 +1,9 @@
-maintainer       "Mark Sonnabaum"
-maintainer_email "mark.sonnabaum@acquia.com"
+maintainer       "Ben Clark"
+maintainer_email "ben@benclark.com"
 license          "Apache 2.0"
-description      "Installs drush"
+description      "Installs drush. Fork of msonnabaum/chef-drush"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
-version          "0.10.0"
+version          "0.30.0"
 depends          "php"
 recommends       "git"
 suggests         "subversion"
@@ -16,5 +16,3 @@ recipe           "drush::make", "Installs Drush Make via Drush. NOT required for
 %w{ debian ubuntu centos redhat }.each do |os|
   supports os
 end
-
-
