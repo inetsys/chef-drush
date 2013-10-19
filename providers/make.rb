@@ -12,15 +12,27 @@ action :install do
     Chef::Log.info("#{ new_resource }: Drupal install already exists - nothing to do.")
   else
     converge_by("Create #{ new_resource }") do
+      Chef::Log.info("Running #{ new_resource } for #{ new_resource.makefile }")
+
       resource_name = new_resource.build_path.gsub('/', '_')
 
       # @todo - how do I execute `which drush`? Or is this not necessary?
       drush_bin = "drush"
 
+      # ensure the build path directory is present.
+      directory new_resource.build_path do
+        owner "root"
+        group "root"
+        mode "0755"
+        action :create
+      end
+
       # Use the execute resource to execute the drush make call.
-      Chef::Log.info("Running #{ new_resource } for #{ new_resource.makefile }")
       execute "drush_make_#{ resource_name }" do
-        command "#{ drush_bin } make #{ new_resource.makefile } #{ new_resource.build_path }"
+        # Drush make fails if the directory exists *unless* it's the current
+        # directory, so use the cwd parameter here.
+        command "#{ drush_bin } -y make #{ new_resource.makefile } ."
+        cwd new_resource.build_path
       end
     end
   end
