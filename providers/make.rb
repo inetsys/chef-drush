@@ -1,6 +1,21 @@
-require 'chef/mixin/shell_out'
-require 'chef/mixin/language'
-include Chef::Mixin::ShellOut
+#
+# Cookbook Name:: drush
+# Provider:: make
+#
+# Author:: Ben Clark <ben@benclark.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
 # Support whyrun
 def whyrun_supported?
@@ -9,30 +24,26 @@ end
 
 action :install do
   if @current_resource.exists
-    Chef::Log.info("#{ new_resource }: Drupal install already exists - nothing to do.")
+    Chef::Log.info("#{@new_resource}: Drupal install already exists - nothing to do.")
   else
-    converge_by("Create #{ new_resource }") do
-      Chef::Log.info("Running #{ new_resource } for #{ new_resource.makefile }")
+    converge_by("Create #{@new_resource}") do
+      Chef::Log.info("Running #{@new_resource} for #{@new_resource.makefile}")
 
-      resource_name = new_resource.build_path.gsub('/', '_')
-
-      # @todo - how do I execute `which drush`? Or is this not necessary?
-      drush_bin = "drush"
-
-      # ensure the build path directory is present.
-      directory new_resource.build_path do
+      # Ensure the build_path directory is present.
+      directory @new_resource.build_path do
         owner "root"
         group "root"
         mode "0755"
         action :create
       end
 
-      # Use the execute resource to execute the drush make call.
-      execute "drush_make_#{ resource_name }" do
-        # Drush make fails if the directory exists *unless* it's the current
-        # directory, so use the cwd parameter here.
-        command "#{ drush_bin } -y make #{ new_resource.makefile } ."
-        cwd new_resource.build_path
+      # Execute the drush make command.
+      drush_cmd "make" do
+        drupal_root @new_resource.build_path
+        arguments "#{@new_resource.makefile} ."
+        shell_user @new_resource.shell_user
+        shell_group @new_resource.shell_group
+        shell_timeout @new_resource.shell_timeout
       end
     end
   end
@@ -41,18 +52,11 @@ end
 def load_current_resource
   @current_resource = Chef::Resource::DrushMake.new(@new_resource.name)
   @current_resource.build_path(@new_resource.build_path)
-  if drupal_exists?(current_resource.build_path)
+  if DrushHelper.drupal_present?(@current_resource.build_path)
+    Chef::Log.debug("Drush found Drupal core at #{@current_resource.build_path}")
     @current_resource.exists = true
+  else
+    Chef::Log.debug("Drush could not find Drupal core at #{@current_resource.build_path}")
   end
-end
-
-def drupal_exists?(path)
-  Chef::Log.debug("Checking to see if #{ path } is a valid Drupal install")
-  p = shell_out("drush -r #{ path } status")
-  response = nil
-  if p.stdout =~ /^\s+Drupal version\s+\:\s+\d+\.\d+/i
-    Chef::Log.debug("Drush found a valid install of Drupal at #{ path }")
-    response = true
-  end
-  response
+  @current_resource
 end

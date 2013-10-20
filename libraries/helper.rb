@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: drush
-# Resource:: make
+# Library:: helper
 #
 # Author:: Ben Clark <ben@benclark.com>
 #
@@ -17,16 +17,20 @@
 # limitations under the License.
 #
 
-actions :install
-default_action :install
+module DrushHelper
+  extend Chef::Mixin::ShellOut
 
-# Required attributes
-attribute :build_path, :name_attribute => true, :kind_of => String, :required => true
-attribute :makefile, :kind_of => String, :required => true
+  def self.drupal_present?(path)
+    p = shell_out!("#{drush_which} -r #{path} status")
+    p.stdout =~ /^\s+Drupal version\s+\:\s+\d+\.\d+/i
+  end
 
-# Chef::Mixin::ShellOut options
-attribute :shell_user, :regex => Chef::Config[:user_valid_regex]
-attribute :shell_group, :regex => Chef::Config[:group_valid_regex]
-attribute :shell_timeout, :kind_of => Integer, :default => 900
+  def self.drupal_installed?(path, uri = 'http://default')
+    p = shell_out!("#{drush_which} -l #{uri} -r #{path} status")
+    p.stdout =~ /^\s+Drupal bootstrap \s+\:\s+Successful/i
+  end
 
-attr_accessor :exists
+  def self.drush_which
+    'drush'
+  end
+end

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: drush
-# Resource:: site_install
+# Resource:: cmd
 #
 # Author:: Ben Clark <ben@benclark.com>
 #
@@ -17,20 +17,40 @@
 # limitations under the License.
 #
 
-actions :install
-default_action :install
+actions :execute
+default_action :execute
 
-attribute :profile, :name_attribute => true, :kind_of => String, :required => true
+# drush <command> [<arguments> [<options>]]
+attribute :command, :name_attribute => true, :kind_of => String, :required => true
+attribute :arguments, :kind_of => String
+attribute :options, :kind_of => String
+
+# drush -r <path>, --root=<path>
 attribute :drupal_root, :kind_of => String, :required => true
 
-attribute :force, :equal_to => [true, false], :default => false
+# drush -l <http://example.com:8888>, --uri=<http://example.com:8888>
+attribute :drupal_uri, :kind_of => String, :default => 'http://default'
 
-attribute :uri, :kind_of => String, :default => 'http://default'
-attribute :site_name, :kind_of => String
+# drush -y, --yes
+attribute :assume_yes, :equal_to => [true, false], :default => true
+
+# drush -n, --no
+attribute :assume_no, :equal_to => [true, false], :default => false
+
+# drush --backend
+attribute :backend, :equal_to => [ true, false], :default => false
 
 # Chef::Mixin::ShellOut options
 attribute :shell_user, :regex => Chef::Config[:user_valid_regex]
 attribute :shell_group, :regex => Chef::Config[:group_valid_regex]
 attribute :shell_timeout, :kind_of => Integer, :default => 900
 
-attr_accessor :exists
+attribute :block, :kind_of => Proc
+
+def block(&block)
+  if block_given? && block
+    @block = block
+  else
+    @block
+  end
+end
