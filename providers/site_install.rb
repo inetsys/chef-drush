@@ -47,10 +47,10 @@ def load_current_resource
   @current_resource.drupal_root(@new_resource.drupal_root)
   @current_resource.uri(@new_resource.uri)
   if DrushHelper.drupal_installed?(@current_resource.drupal_root, @current_resource.uri)
-    Chef::Log.debug("Drush successfully bootstrapped Drupal at #{@current_resource.build_path}")
+    Chef::Log.debug("Drush successfully bootstrapped Drupal at #{@current_resource.drupal_root}")
     @current_resource.exists = true
   else
-    Chef::Log.debug("Drush could not bootstrap Drupal at #{@current_resource.build_path}")
+    Chef::Log.debug("Drush could not bootstrap Drupal at #{@current_resource.drupal_root}")
   end
   @current_resource
 end
