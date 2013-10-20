@@ -32,6 +32,7 @@ action :install do
       # Execute the drush site-install command.
       drush_cmd "site-install" do
         drupal_root @new_resource.drupal_root
+        drupal_uri @new_resource.uri
         arguments @new_resource.profile
         options "--site-name=\"#{@new_resource.site_name}\""
         shell_user @new_resource.shell_user
