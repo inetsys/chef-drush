@@ -16,9 +16,9 @@
 # limitations under the License.
 #
 
-require_recipe "git"
+include_recipe "git"
 
-case node[:platform]
+case node['platform']
 when "debian", "ubuntu", "centos", "redhat"
   git node['drush']['install_dir'] do
     repository "git://git.drupalcode.org/project/drush.git"
