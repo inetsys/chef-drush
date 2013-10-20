@@ -22,8 +22,8 @@ default_action :execute
 
 # drush <command> [<arguments> [<options>]]
 attribute :command, :name_attribute => true, :kind_of => String, :required => true
-attribute :arguments, :kind_of => String
-attribute :options, :kind_of => String
+attribute :arguments, :kind_of => [ String, Array ]
+attribute :options, :kind_of => [ String, Array ]
 
 # drush -r <path>, --root=<path>
 attribute :drupal_root, :kind_of => String, :required => true
@@ -41,9 +41,10 @@ attribute :assume_no, :equal_to => [true, false], :default => false
 attribute :backend, :equal_to => [ true, false], :default => false
 
 # Chef::Mixin::ShellOut options
+attribute :shell_input, :kind_of => String
+attribute :shell_timeout, :kind_of => Integer, :default => 900
 attribute :shell_user, :regex => Chef::Config[:user_valid_regex]
 attribute :shell_group, :regex => Chef::Config[:group_valid_regex]
-attribute :shell_timeout, :kind_of => Integer, :default => 900
 
 attribute :block, :kind_of => Proc
 

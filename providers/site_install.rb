@@ -27,14 +27,16 @@ action :install do
     Chef::Log.info("#{@new_resource}: Drupal site already exists - nothing to do.")
   else
     converge_by("Create #{@new_resource}") do
-      Chef::Log.info("Running #{@new_resource} for #{@new_resource.uri} in #{@new_resource.drupal_root}")
+      Chef::Log.info("Running #{@new_resource} for #{@new_resource.drupal_uri} in #{@new_resource.drupal_root}")
 
       # Execute the drush site-install command.
       drush_cmd "site-install" do
-        drupal_root new_resource.drupal_root
-        drupal_uri new_resource.uri
         arguments new_resource.profile
         options "--site-name=\"#{new_resource.site_name}\""
+
+        drupal_root new_resource.drupal_root
+        drupal_uri new_resource.drupal_uri
+
         shell_user new_resource.shell_user
         shell_group new_resource.shell_group
         shell_timeout new_resource.shell_timeout
@@ -46,8 +48,8 @@ end
 def load_current_resource
   @current_resource = Chef::Resource::DrushSiteInstall.new(@new_resource.name)
   @current_resource.drupal_root(@new_resource.drupal_root)
-  @current_resource.uri(@new_resource.uri)
-  if DrushHelper.drupal_installed?(@current_resource.drupal_root, @current_resource.uri)
+  @current_resource.drupal_uri(@new_resource.drupal_uri)
+  if DrushHelper.drupal_installed?(@current_resource.drupal_root, @current_resource.drupal_uri)
     Chef::Log.debug("Drush successfully bootstrapped Drupal at #{@current_resource.drupal_root}")
     @current_resource.exists = true
   else

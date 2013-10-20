@@ -34,12 +34,16 @@ action :execute do
 
       # Execute the drush make command.
       drush_cmd "php-eval" do
-        drupal_root new_resource.drupal_root
         arguments "'#{php_eval}'"
         options "--format=#{new_resource.format}"
+
+        drupal_root new_resource.drupal_root
+        drupal_uri new_resource.drupal_uri
+
         shell_user new_resource.shell_user
         shell_group new_resource.shell_group
         shell_timeout new_resource.shell_timeout
+
         block { |stdout| new_resource.block.call(stdout) } if new_resource.block
       end
     end
