@@ -30,6 +30,24 @@ module DrushHelper
     p.stdout =~ /^\s+Drupal bootstrap \s+\:\s+Successful/i
   end
 
+  def self.drush_vget_json(path, name, uri = 'http://default', exact_match = true)
+    exact_option = "--exact" if exact_match
+    cmd = "#{drush_which} -l #{uri} -r #{path} vget #{name} #{exact_option} --format=json"
+    Chef::Log.debug("drush_vget_json: #{cmd}")
+    begin
+      p = shell_out!(cmd)
+      JSON.parse(p.stdout) if p.stdout
+    rescue => e
+      Chef::Log.debug("drush_vget_json: #{e.message}")
+    end
+  end
+
+  def self.drush_vget_match?(path, name, value, uri = 'http://default')
+    vget = drush_vget_json(path, name, uri)
+    value = value.to_s if value.is_a?(Integer)
+    vget.is_a?(Hash) && vget.key?(name) && vget[name] == value
+  end
+
   def self.drush_which
     'drush'
   end
