@@ -39,11 +39,11 @@ action :install do
 
       # Execute the drush make command.
       drush_cmd "make" do
-        drupal_root @new_resource.build_path
-        arguments "#{@new_resource.makefile} ."
-        shell_user @new_resource.shell_user
-        shell_group @new_resource.shell_group
-        shell_timeout @new_resource.shell_timeout
+        drupal_root new_resource.build_path
+        arguments "#{new_resource.makefile} ."
+        shell_user new_resource.shell_user
+        shell_group new_resource.shell_group
+        shell_timeout new_resource.shell_timeout
       end
     end
   end
