@@ -47,7 +47,7 @@ action :execute do
 end
 
 def load_current_resource
-  @current_resource = Chef::Resource::DrushMake.new(@new_resource.name)
+  @current_resource = Chef::Resource::DrushPhpEval.new(@new_resource.name)
   @current_resource.drupal_root(@new_resource.drupal_root)
   if DrushHelper.drupal_present?(@current_resource.drupal_root)
     Chef::Log.debug("Drush found Drupal core at #{@current_resource.drupal_root}")
