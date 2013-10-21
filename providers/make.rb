@@ -39,7 +39,7 @@ action :install do
 
       # Execute the drush make command.
       drush_cmd "make" do
-        arguments [ "#{new_resource.makefile}", "." ]
+        arguments [ new_resource.makefile, "." ]
 
         drupal_root new_resource.build_path
 
