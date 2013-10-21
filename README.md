@@ -57,13 +57,13 @@ When install_method is git, the format is a git reference commit/tag/branch (eg.
 
 # LWRPs
 
-## drush_make
+The drush cookbook contains the following lightweight resources:
 
-Turns a makefile into a Drupal codebase. Supports `build_path` and `makefile` parameters. More to come.
-
-    drush_make /var/www/html/drupal do
-      makefile http://www.github.com/blah/makefile.make
-    end
+* [`drush_cmd`](https://github.com/benclark/chef-drush/wiki/drush-Lightweight-Resources#drush_cmd)
+* [`drush_variable`](https://github.com/benclark/chef-drush/wiki/drush-Lightweight-Resources#drush_variable)
+* [`drush_php_eval`](https://github.com/benclark/chef-drush/wiki/drush-Lightweight-Resources#drush_php_eval)
+* [`drush_make`](https://github.com/benclark/chef-drush/wiki/drush-Lightweight-Resources#drush_make)
+* [`drush_site_install`](https://github.com/benclark/chef-drush/wiki/drush-Lightweight-Resources#drush_site_install)
 
 # Usage
 
