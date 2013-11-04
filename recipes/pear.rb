@@ -1,4 +1,4 @@
-# 
+#
 # Author:: Mark Sonnabaum <mark.sonnabaum@acquia.com>
 # Contributor:: Patrick Connolly <patrick@myplanetdigital.com>
 # Cookbook Name:: drush
