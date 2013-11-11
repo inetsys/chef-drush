@@ -52,12 +52,8 @@ action :execute do
   # Execute the drush command
   cmd = drush_command.join(' ')
   Chef::Log.debug("drush_cmd: Execute #{cmd}")
-  begin
-    p = shell_out!(cmd, shell_options)
-    new_resource.block.call(p.stdout) if new_resource.block
-  rescue => e
-    Chef::Log.debug("drush_cmd: #{e.message}")
-  end
+  p = shell_out!(cmd, shell_options)
+  new_resource.block.call(p.stdout) if new_resource.block
 
   new_resource.updated_by_last_action(true)
 end
