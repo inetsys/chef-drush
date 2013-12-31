@@ -21,23 +21,13 @@ module DrushHelper
   extend Chef::Mixin::ShellOut
 
   def self.drupal_present?(path)
-    begin
-      p = shell_out!("#{drush_which} -r #{path} status")
-      p.stdout =~ /^\s+Drupal version\s+\:\s+\d+\.\d+/i
-    rescue => e
-      Chef::Log.debug("drupal_present?: #{e.message}")
-      false
-    end
+    p = shell_out!("#{drush_which} -r #{path} status")
+    p.stdout =~ /^\s+Drupal version\s+\:\s+\d+\.\d+/i
   end
 
   def self.drupal_installed?(path, uri = 'http://default')
-    begin
-      p = shell_out!("#{drush_which} -l #{uri} -r #{path} status")
-      p.stdout =~ /^\s+Drupal bootstrap \s+\:\s+Successful/i
-    rescue => e
-      Chef::Log.debug("drupal_installed?: #{e.message}")
-      false
-    end
+    p = shell_out!("#{drush_which} -l #{uri} -r #{path} status")
+    p.stdout =~ /^\s+Drupal bootstrap \s+\:\s+Successful/i
   end
 
   def self.drush_vget_json(path, name, uri = 'http://default', exact_match = true)
