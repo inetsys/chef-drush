@@ -26,8 +26,29 @@ module DrushHelper
   end
 
   def self.drupal_installed?(path, uri = 'http://default')
-    p = shell_out!("#{drush_which} -l #{uri} -r #{path} status")
-    p.stdout =~ /^\s+Drupal bootstrap \s+\:\s+Successful/i
+    begin
+      p = shell_out!("#{drush_which} -l #{uri} -r #{path} status")
+      Chef::Log.debug("drupal_installed?: drush status STDOUT: #{p.stdout}")
+      p.stdout =~ /^\s+Drupal bootstrap \s+\:\s+Successful/i
+    rescue => e
+      Chef::Log.debug("drupal_installed?: #{e.message}")
+      # Check whether the system table is present. The assumption here is that
+      # there is no database prefix.
+      begin
+        p2 = shell_out!("#{drush_which} -l #{uri} -r #{path} sql-cli", { :input => 'SELECT * FROM system LIMIT 0,1' })
+        Chef::Log.debug("drupal_installed?: drush sql-cli STDOUT: #{p2.stdout}")
+        Chef::Log.debug("drupal_installed?: drush sql-cli STDERR: #{p2.stderr}")
+        if (p2.stderr =~ /Table.+\.system.+doesn't exist/i)
+          # Safe to assume Drupal is not installed if it explicitly says the
+          # system table is missing.
+          Chef::Log.debug("drupal_installed?: system table doesn't exist; Drupal not installed")
+          return false
+        end
+      rescue => e2
+        Chef::Log.debug("drupal_installed?: #{e2.message}")
+      end
+      raise "drupal_installed?: could not reliably determine whether Drupal is installed or not"
+    end
   end
 
   def self.drush_vget_json(path, name, uri = 'http://default', exact_match = true)
