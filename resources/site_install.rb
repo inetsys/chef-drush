@@ -27,7 +27,20 @@ attribute :drupal_uri, :kind_of => String, :default => 'http://default'
 
 attribute :force, :equal_to => [true, false], :default => false
 
+attribute :account_mail, :kind_of => String
+attribute :account_pass, :kind_of => String
+attribute :clean_url, :equal_to => [nil, 0, 1]
+attribute :db_prefix, :kind_of => String
+attribute :db_su, :kind_of => String
+attribute :db_su_pw, :kind_of => String
+attribute :db_url, :kind_of => String
+attribute :locale, :kind_of => String
+attribute :site_mail, :kind_of => String
 attribute :site_name, :kind_of => String
+attribute :sites_subdir, :kind_of => String
+
+attribute :additional_arguments, :kind_of => Array, :default => []
+attribute :additional_options, :kind_of => Array, :default => []
 
 # Chef::Mixin::ShellOut options
 attribute :shell_user, :regex => Chef::Config[:user_valid_regex]

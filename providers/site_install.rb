@@ -29,10 +29,35 @@ action :install do
     converge_by("Create #{@new_resource}") do
       Chef::Log.info("Running #{@new_resource} for #{@new_resource.drupal_uri} in #{@new_resource.drupal_root}")
 
+      # Map the attributes into options array.
+      install_options = {
+        "account-mail" => new_resource.account_mail,
+        "account-pass" => new_resource.account_pass,
+        "clean-url" => new_resource.clean_url,
+        "db-prefix" => new_resource.db_prefix,
+        "db-su" => new_resource.db_su,
+        "db-su-pw" => new_resource.db_su_pw,
+        "db-url" => new_resource.db_url,
+        "locale" => new_resource.locale,
+        "site-mail" => new_resource.site_mail,
+        "site-name" => new_resource.site_name,
+        "sites-subdir" => new_resource.sites_subdir
+      }
+      install_options = install_options.map{|k,v| "--#{k}=\"#{v}\"" if v }
+
+      # Append any additional options.
+      install_options += new_resource.additional_options if new_resource.additional_options
+
+      # Set the required argument, profile.
+      install_arguments = [ new_resource.profile ]
+
+      # Append any additional arguments.
+      install_arguments += new_resource.additional_arguments if new_resource.additional_arguments
+
       # Execute the drush site-install command.
       drush_cmd "site-install" do
-        arguments new_resource.profile
-        options "--site-name=\"#{new_resource.site_name}\""
+        arguments install_arguments
+        options install_options
 
         drupal_root new_resource.drupal_root
         drupal_uri new_resource.drupal_uri
