@@ -70,3 +70,25 @@ The drush cookbook contains the following lightweight resources:
 Simply include the `drush` or `drush::make` recipe wherever you would
 like drush installed. You may alter the `install_method` and `version`
 attributes appropriately.
+
+== Resource/Provider
+
+This cookbook includes LWRP. The +drush_execute+ resource is used to execute a drush command. Commands that are executed with this resource are (by their nature) not idempotent, as they are typically unique to the environment in which they are run.
+
+=== Syntax
+
+  drush_execute "command" do
+    cwd drupal_path
+    options %W{views
+                stable
+                ...
+                --use-site-dir=default}
+  end
+
+where
+
+* +cwd+ drupal work directory
+* +command+ is the name of the command that will be run
+* +options+ is zero (or more) of the specific command available options
+* +:action+ is the step that the resource will ask the provider to take during the chef-client. +:run+ Default. Indicates that the command should be run or +:nothing+.
+

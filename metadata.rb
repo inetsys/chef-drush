@@ -1,12 +1,12 @@
-name             "drush"
-maintainer       "Ben Clark"
-maintainer_email "ben@benclark.com"
+name             'drush'
+maintainer       "Mark Sonnabaum"
+maintainer_email "mark.sonnabaum@acquia.com"
 license          "Apache 2.0"
-description      "Installs drush. Fork of msonnabaum/chef-drush"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.30.3"
-depends          "php"
-depends          "git"
+description      "Installs drush, the Drupal Shell."
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+version          "0.10.0"
+depends          "php", ">= 0.99.0"
+recommends       "git"
 
 recipe           "drush",       "Installs Drush and dependencies."
 recipe           "drush::pear", "Installs Drush via PEAR."

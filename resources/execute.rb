@@ -1,8 +1,7 @@
-# 
-# Author:: Mark Sonnabaum <mark.sonnabaum@acquia.com>
-# Contributor:: Patrick Connolly <patrick@myplanetdigital.com>
+#
+# Author:: Konstantin Sorokin <k.n.sorokin@gmail.com>
 # Cookbook Name:: drush
-# Recipe:: install_console_table
+# Resource:: execute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +16,9 @@
 # limitations under the License.
 #
 
-php_pear "Console_Table" do
-  action :install
-  version node['drush']['console_table']['version']
-end
+default_action :run
+actions :run
+
+attribute :command, :kind_of => String, :name_attribute => true
+attribute :cwd, :kind_of => String
+attribute :options, :kind_of => Array, :default => []

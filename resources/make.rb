@@ -29,4 +29,12 @@ attribute :shell_user, :regex => Chef::Config[:user_valid_regex]
 attribute :shell_group, :regex => Chef::Config[:group_valid_regex]
 attribute :shell_timeout, :kind_of => Integer, :default => 900
 
+case node[:platform]
+when "debian", "ubuntu", "centos", "redhat"
+  git node['drush']['install_dir'] do
+    repository "https://github.com/drush-ops/drush.git"
+    reference node['drush']['version']
+    action :sync
+  end
+
 attr_accessor :exists
