@@ -45,6 +45,7 @@ attribute :shell_input, :kind_of => String
 attribute :shell_timeout, :kind_of => Integer, :default => 900
 attribute :shell_user, :regex => Chef::Config[:user_valid_regex]
 attribute :shell_group, :regex => Chef::Config[:group_valid_regex]
+attribute :shell_environment, :kind_of => Hash, :default => {}
 
 attribute :block, :kind_of => Proc
 

@@ -34,7 +34,7 @@ action :revert do
             drush_cmd "fr" do
                 arguments       to_revert
                 drupal_root     new_resource.drupal_root
-                drupal_uri      new_resource.drupal_uri ? new_resource.drupal_uri : "http://#{new_resource.site}/"
+                drupal_uri      new_resource.drupal_uri
             end
             Chef::Log.info("Features reverted")
         end
@@ -47,7 +47,7 @@ def load_current_resource
     @current_resource = Chef::Resource::DrushFeatures.new(@new_resource.site)
 
     @current_resource.drupal_root(@new_resource.drupal_root)
-    @current_resource.drupal_uri(@new_resource.drupal_uri)
+    @current_resource.drupal_uri(@new_resource.drupal_uri ? @new_resource.drupal_uri : "http://#{@new_resource.site}/")
     @current_resource.features(@new_resource.features)
 
     if DrushHelper.drupal_installed?(@current_resource.drupal_root, @current_resource.drupal_uri) && DrushHelper.is_enabled?(@current_resource.drupal_root, @current_resource.drupal_uri, 'features')
