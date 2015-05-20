@@ -1,0 +1,13 @@
+<%= @original_content %>
+<% if !@cookie_domain.empty? -%>
+
+$cookie_domain = '<%= @cookie_domain %>';
+<% end -%>
+<% if @db_prefix.is_a?(Hash) -%>
+
+$databases['default']['default']['prefix'] = array(
+    <% @db_prefix.each do |table, prefix| -%>
+    '<%= table %>' => '<%= prefix %>',
+    <% end -%>
+);
+<% end -%>

@@ -30,7 +30,7 @@ attribute :force, :equal_to => [true, false], :default => false
 attribute :account_mail, :kind_of => String
 attribute :account_pass, :kind_of => String
 attribute :clean_url, :equal_to => [nil, 0, 1]
-attribute :db_prefix, :kind_of => String
+attribute :db_prefix, :kind_of => [ String, Hash ], :default => ''
 attribute :db_su, :kind_of => String
 attribute :db_su_pw, :kind_of => String
 attribute :db_url, :kind_of => String
