@@ -64,14 +64,14 @@ action :install do
 
             # Execute the drush site-install command.
             drush_cmd "site-install" do
-                arguments install_arguments
-                options install_options
+                arguments     install_arguments
+                options       install_options
 
-                drupal_root new_resource.drupal_root
-                drupal_uri new_resource.drupal_uri
+                drupal_root   new_resource.drupal_root
+                drupal_uri    new_resource.drupal_uri
 
-                shell_user new_resource.shell_user
-                shell_group new_resource.shell_group
+                shell_user    new_resource.shell_user
+                shell_group   new_resource.shell_group
                 shell_timeout new_resource.shell_timeout
             end
         end
@@ -82,7 +82,7 @@ def load_current_resource
     @current_resource = Chef::Resource::DrushSiteInstall.new(@new_resource.name)
     @current_resource.drupal_root(@new_resource.drupal_root)
     @current_resource.drupal_uri(@new_resource.drupal_uri)
-    if DrushHelper.drupal_installed?(@current_resource.drupal_root, @current_resource.drupal_uri)
+    if DrushHelper.drupal_installed?(@new_resource.shell_user, @current_resource.drupal_root, @current_resource.drupal_uri)
         Chef::Log.debug("Drush successfully bootstrapped Drupal at #{@current_resource.drupal_root}")
         @current_resource.exists = true
     else

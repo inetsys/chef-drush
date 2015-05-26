@@ -15,7 +15,7 @@ action :enable do
         converge_by("Create #{@new_resource}") do
             Chef::Log.info("Running #{@new_resource} at #{@new_resource.drupal_root}")
 
-            site_modules = DrushHelper.get_module_list(@current_resource.drupal_root, @current_resource.drupal_uri)
+            site_modules = DrushHelper.get_module_list(new_resource.shell_user, @current_resource.drupal_root, @current_resource.drupal_uri)
 
             to_enable = []
             error = []
@@ -39,6 +39,9 @@ action :enable do
                 arguments       to_enable.join(' ')
                 drupal_root     new_resource.drupal_root
                 drupal_uri      new_resource.drupal_uri ? new_resource.drupal_uri : "http://#{new_resource.site}/"
+                shell_user      new_resource.shell_user
+                shell_group     new_resource.shell_group
+                shell_timeout   new_resource.shell_timeout
                 only_if { to_enable.any? }
             end
         end
@@ -56,7 +59,7 @@ def load_current_resource
     @current_resource.drupal_uri(@new_resource.drupal_uri)
     @current_resource.modules(@new_resource.modules)
 
-    if DrushHelper.drupal_installed?(@current_resource.drupal_root, @current_resource.drupal_uri)
+    if DrushHelper.drupal_installed?(@new_resource.shell_user, @current_resource.drupal_root, @current_resource.drupal_uri)
         Chef::Log.debug("Drush bootstrapped Drupal at #{@current_resource.drupal_root}")
         @current_resource.exists = true
     else

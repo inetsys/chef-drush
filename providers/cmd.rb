@@ -30,6 +30,7 @@ action :execute do
     shell_options[:cwd] = new_resource.drupal_root if new_resource.drupal_root && ::File.directory?(new_resource.drupal_root)
     shell_options[:environment] = new_resource.shell_environment
     shell_options[:environment]['HOME'] = ::File.expand_path("~#{new_resource.shell_user}") if new_resource.shell_user
+    shell_options[:environment]['PATH'] = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:#{::Dir.home(new_resource.shell_user)}/vendor/bin"
 
     # Build the drush options
     drush_options = [ "--uri=#{new_resource.drupal_uri}" ]

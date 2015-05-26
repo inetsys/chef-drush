@@ -55,7 +55,7 @@ end
 def load_current_resource
   @current_resource = Chef::Resource::DrushMake.new(@new_resource.name)
   @current_resource.build_path(@new_resource.build_path)
-  if DrushHelper.drupal_present?(@current_resource.build_path)
+  if DrushHelper.drupal_present?(@new_resource.shell_user, @current_resource.build_path)
     Chef::Log.debug("Drush found Drupal core at #{@current_resource.build_path}")
     @current_resource.exists = true
   else

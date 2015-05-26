@@ -25,7 +25,7 @@ end
 action :set do
   if !@current_resource.exists
     Chef::Log.info("#{@new_resource}: Drupal could not be bootstrapped - nothing to do.")
-  elsif DrushHelper.drush_vget_match?(@new_resource.drupal_root, @new_resource.name, @new_resource.value, @new_resource.drupal_uri)
+  elsif DrushHelper.drush_vget_match?(@new_resource.shell_user, @new_resource.drupal_root, @new_resource.name, @new_resource.value, @new_resource.drupal_uri)
     Chef::Log.info("#{@new_resource}: Drupal variable matches value - nothing to do.")
   else
     converge_by("Create #{@new_resource}") do
@@ -46,17 +46,17 @@ action :set do
 
       # Execute the drush make command.
       drush_cmd "vset" do
-        arguments [ new_resource.name, value_json ? "-" : value ]
-        options options
+        arguments     [ new_resource.name, value_json ? "-" : value ]
+        options       options
 
-        drupal_root new_resource.drupal_root
-        drupal_uri new_resource.drupal_uri
+        drupal_root   new_resource.drupal_root
+        drupal_uri    new_resource.drupal_uri
 
         # Pipe the JSON value into the command
-        shell_input value_json.to_s if value_json
+        shell_input   value_json.to_s if value_json
 
-        shell_user new_resource.shell_user
-        shell_group new_resource.shell_group
+        shell_user    new_resource.shell_user
+        shell_group   new_resource.shell_group
         shell_timeout new_resource.shell_timeout
       end
     end
@@ -67,7 +67,7 @@ def load_current_resource
   @current_resource = Chef::Resource::DrushVariable.new(@new_resource.name)
   @current_resource.drupal_root(@new_resource.drupal_root)
   @current_resource.drupal_uri(@new_resource.drupal_uri)
-  if DrushHelper.drupal_installed?(@current_resource.drupal_root, @current_resource.drupal_uri)
+  if DrushHelper.drupal_installed?(@new_resource.shell_user, @current_resource.drupal_root, @current_resource.drupal_uri)
     Chef::Log.debug("Drush bootstrapped Drupal at #{@current_resource.drupal_root}")
     @current_resource.exists = true
   else

@@ -34,14 +34,14 @@ action :execute do
 
       # Execute the drush make command.
       drush_cmd "php-eval" do
-        arguments "'#{php_eval}'"
-        options "--format=#{new_resource.format}"
+        arguments     "'#{php_eval}'"
+        options       "--format=#{new_resource.format}"
 
-        drupal_root new_resource.drupal_root
-        drupal_uri new_resource.drupal_uri
+        drupal_root   new_resource.drupal_root
+        drupal_uri    new_resource.drupal_uri
 
-        shell_user new_resource.shell_user
-        shell_group new_resource.shell_group
+        shell_user    new_resource.shell_user
+        shell_group   new_resource.shell_group
         shell_timeout new_resource.shell_timeout
 
         block { |stdout| new_resource.block.call(stdout) } if new_resource.block
@@ -53,7 +53,7 @@ end
 def load_current_resource
   @current_resource = Chef::Resource::DrushPhpEval.new(@new_resource.name)
   @current_resource.drupal_root(@new_resource.drupal_root)
-  if DrushHelper.drupal_present?(@current_resource.drupal_root)
+  if DrushHelper.drupal_present?(@new_resource.shell_user, @current_resource.drupal_root)
     Chef::Log.debug("Drush found Drupal core at #{@current_resource.drupal_root}")
     @current_resource.exists = true
   else
