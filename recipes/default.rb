@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe "php"
+include_recipe 'composer::install'
 
-include_recipe "drush::install_console_table"
-include_recipe "drush::pear"
+include_recipe "drush::composer"

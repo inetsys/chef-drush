@@ -1,11 +1,12 @@
 name             "drush"
-maintainer       "Ben Clark"
-maintainer_email "ben@benclark.com"
+maintainer       "Inetsys"
+maintainer_email "sistemas@inetsys.es"
 license          "Apache 2.0"
 description      "Installs drush. Fork of msonnabaum/chef-drush"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.30.3"
+version          "0.4.0"
 depends          "php"
+depends          "composer"
 depends          "git"
 
 recipe           "drush",       "Installs Drush and dependencies."

@@ -19,7 +19,9 @@
 
 # When installing via PEAR, this is the preferred state (stable, beta, devel)
 # or a specific x.y.z pear version (eg. 4.5.0).
-default['drush']['version'] = "stable"
+default['drush']['version'] = "7.*"
 
 # URL of allreleases.xml for pear to install from preferred states
 default['drush']['allreleases'] = "http://pear.drush.org/rest/r/drush/allreleases.xml"
+
+default['drush']['user'] = 'nobody'

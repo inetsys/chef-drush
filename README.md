@@ -1,11 +1,10 @@
 # Description
 
-Installs the Drush CLI tool for Drupal, either via PEAR package or directly from source via Git.
-Also included is a recipe that can be used to install drush_make via the `drush pm-download` command.
+Installs the Drush CLI tool for Drupal, via Composer.
 
 # Requirements
 
-* Opscode's php cookbook - http://community.opscode.com/cookbooks/php/
+* Composer cookbook (http://community.opscode.com/cookbooks/composer)
 
 # Platforms
 
@@ -23,37 +22,17 @@ recipes run on these platforms without error.
 Installs drush using the desired `install_method` recipe, and
 also includes minor recipes to meet dependencies.
 
-## pear
+## composer
 
-Installs drush via PEAR package manager.
-
-## git
-
-Install drush via Git from source repository.
-
-## upgrade_pear
-
-Upgrades PEAR to v1.9.1, which meets minimum required by drush via PEAR.
-
-## install_console_table
-
-Installs PEAR Console_Table extension dependency.
-
-## make
-
-Executes a drush command to install drush_make.  If the `drush make` command
-is already available, this command will not be run.
+Installs drush via Composer.
 
 # Attributes
 
 ## default
 
-* `node['drush']['install_method']` - Indicates the desired install method, currently either `git` or `pear`.
-* `node['drush']['version']` - Drush preferred state (stable, beta, devel) or version of format x.y.z when install_method is pear (eg. 5.0.0).
-When install_method is git, the format is a git reference commit/tag/branch (eg. 31d768a / 7.x-4.x / 7.x-5.0 )
-* `node['drush']['allreleases']` - URL of allreleases.xml for pear to install from preferred states.
-* `node['drush']['make']['version']` - Drush Make version of format x.y
-* `node['drush']['install_dir']` - Where to install Drush via Git. Used to install Drush Make as well.
+* `node['drush']['version']` - Drush version of format x.y.z (eg. 5.0.0).
+* `node['drush']['install_dir']` - Where to install Drush.
+* `node['drush']['user']` - User to run composer commands.
 
 # LWRPs
 
@@ -67,6 +46,6 @@ The drush cookbook contains the following lightweight resources:
 
 # Usage
 
-Simply include the `drush` or `drush::make` recipe wherever you would
-like drush installed. You may alter the `install_method` and `version`
+Simply include the `drush` or `drush::composer` recipe wherever you would
+like drush installed. You may alter the `version` and `user`
 attributes appropriately.
