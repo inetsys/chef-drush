@@ -4,7 +4,7 @@ maintainer_email "sistemas@inetsys.es"
 license          "Apache 2.0"
 description      "Installs drush. Fork of msonnabaum/chef-drush"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "1.0.0"
+version          "1.0.2"
 depends          "php"
 depends          "composer"
 depends          "git"
