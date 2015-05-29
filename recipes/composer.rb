@@ -20,9 +20,9 @@
 include_recipe 'composer::install'
 
 execute "install-drush-composer" do
-  cwd         ::Dir.home(node['drush']['user'])
+  cwd         homedir(node['drush']['user'])
   command     "#{node['composer']['bin']} global require drush/drush:#{node['drush']['version']} --no-interaction --no-ansi"
-  environment 'COMPOSER_HOME' => ::Dir.home(node['drush']['user']), 'HOME' => ::Dir.home(node['drush']['user']), 'USER' => node['drush']['user']
+  environment 'COMPOSER_HOME' => homedir(node['drush']['user']), 'HOME' => homedir(node['drush']['user']), 'USER' => node['drush']['user']
   user        node['drush']['user']
   only_if     "stat #{node['composer']['bin']}"
   action      :run
