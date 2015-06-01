@@ -33,6 +33,22 @@ class Chef
   end
 end
 
+class Chef
+  class Resource
+    class RubyBlock
+      def homedir(username)
+        homedir = '/nonexistent'
+        begin
+          homedir = ::Dir.home(username)
+        rescue ArgumentError
+          homedir = "/home/#{username}"
+        end
+        return homedir
+      end
+    end
+  end
+end
+
 module DrushHelper
     extend Chef::Mixin::ShellOut
 

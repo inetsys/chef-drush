@@ -30,7 +30,7 @@ end
 
 ruby_block 'ensure composer bin dir is in PATH' do
   block do
-    fe = Chef::Util::FileEdit.new("#{::Dir.home(node['drush']['user'])}/.bashrc")
+    fe = Chef::Util::FileEdit.new("#{homedir(node['drush']['user'])}/.bashrc")
     fe.insert_line_if_no_match(/^PATH="$PATH:$HOME\/vendor\/bin"$/, 'PATH="$PATH:$HOME/vendor/bin"')
     fe.write_file
   end
