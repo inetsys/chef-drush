@@ -14,5 +14,3 @@ suites:
     run_list:
       - recipe[drush::default]
     attributes:
-      drush:
-        user: vagrant

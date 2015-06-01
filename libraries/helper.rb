@@ -19,6 +19,22 @@
 
 class Chef
   class Resource
+    class User
+      def homedir(username)
+        homedir = '/nonexistent'
+        begin
+          homedir = ::Dir.home(username)
+        rescue ArgumentError
+          homedir = "/home/#{username}"
+        end
+        return homedir
+      end
+    end
+  end
+end
+
+class Chef
+  class Resource
     class Execute
       def homedir(username)
         homedir = '/nonexistent'
