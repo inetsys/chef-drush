@@ -31,21 +31,21 @@ action :install do
 
       # Ensure the build_path directory is present.
       directory @new_resource.build_path do
-        owner new_resource.shell_user
-        group new_resource.shell_group
-        mode "0755"
+        owner     new_resource.shell_user
+        group     new_resource.shell_group
+        mode      "0755"
         recursive true
-        action :create
+        action    :create
       end
 
       # Execute the drush make command.
       drush_cmd "make" do
-        arguments [ new_resource.makefile, "." ]
+        arguments     [ new_resource.makefile, "." ]
 
-        drupal_root new_resource.build_path
+        drupal_root   new_resource.build_path
 
-        shell_user new_resource.shell_user
-        shell_group new_resource.shell_group
+        shell_user    new_resource.shell_user
+        shell_group   new_resource.shell_group
         shell_timeout new_resource.shell_timeout
       end
     end
@@ -55,6 +55,7 @@ end
 def load_current_resource
   @current_resource = Chef::Resource::DrushMake.new(@new_resource.name)
   @current_resource.build_path(@new_resource.build_path)
+  @current_resource.makefile(@new_resource.makefile)
   if DrushHelper.drupal_present?(@new_resource.shell_user, @current_resource.build_path)
     Chef::Log.debug("Drush found Drupal core at #{@current_resource.build_path}")
     @current_resource.exists = true

@@ -56,7 +56,7 @@ def load_current_resource
     @current_resource = Chef::Resource::DrushModule.new(@new_resource.site)
 
     @current_resource.drupal_root(@new_resource.drupal_root)
-    @current_resource.drupal_uri(@new_resource.drupal_uri)
+    @current_resource.drupal_uri(@new_resource.drupal_uri ? @new_resource.drupal_uri : "http://#{@new_resource.site}/")
     @current_resource.modules(@new_resource.modules)
 
     if DrushHelper.drupal_installed?(@new_resource.shell_user, @current_resource.drupal_root, @current_resource.drupal_uri)

@@ -60,13 +60,19 @@ action :open do
                 drush_variable 'maintenance_mode' do
                     value           0
                     drupal_root     new_resource.drupal_root
-                    drupal_uri      new_resource.drupal_uri
+                    drupal_uri      new_resource.drupal_uri ? new_resource.drupal_uri : "http://#{new_resource.site}/"
+                    shell_user      new_resource.shell_user
+                    shell_group     new_resource.shell_group
+                    shell_timeout   new_resource.shell_timeout
                 end
             elsif @new_resource.version == 6 then
                 drush_variable 'site_offline' do
                     value           0
                     drupal_root     new_resource.drupal_root
-                    drupal_uri      new_resource.drupal_uri
+                    drupal_uri      new_resource.drupal_uri ? new_resource.drupal_uri : "http://#{new_resource.site}/"
+                    shell_user      new_resource.shell_user
+                    shell_group     new_resource.shell_group
+                    shell_timeout   new_resource.shell_timeout
                 end
             else
                 raise "Drupal version is invalid"
@@ -74,10 +80,11 @@ action :open do
 
             drush_cmd 'cache-clear' do
                 drupal_root     new_resource.drupal_root
-                drupal_uri      new_resource.drupal_uri
+                drupal_uri      new_resource.drupal_uri ? new_resource.drupal_uri : "http://#{new_resource.site}/"
                 arguments       [ 'menu' ]
                 shell_user      new_resource.shell_user
                 shell_group     new_resource.shell_group
+                shell_timeout   new_resource.shell_timeout
             end
         end
     end
@@ -91,6 +98,7 @@ def load_current_resource
     @current_resource.version(@new_resource.version)
     @current_resource.shell_user(@new_resource.shell_user)
     @current_resource.shell_group(@new_resource.shell_group)
+    @current_resource.shell_timeout(@new_resource.shell_timeout)
 
     if DrushHelper.drupal_installed?(@new_resource.shell_user, @current_resource.drupal_root, @current_resource.drupal_uri)
         Chef::Log.debug("Drush bootstrapped Drupal at #{@current_resource.drupal_root}")

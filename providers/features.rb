@@ -37,7 +37,7 @@ action :revert do
             drush_cmd "fr" do
                 arguments       to_revert
                 drupal_root     new_resource.drupal_root
-                drupal_uri      new_resource.drupal_uri
+                drupal_uri      new_resource.drupal_uri ? new_resource.drupal_uri : "http://#{new_resource.site}/"
                 shell_user      new_resource.shell_user
                 shell_group     new_resource.shell_group
                 shell_timeout   new_resource.shell_timeout
