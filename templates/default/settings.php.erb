@@ -1,13 +1,55 @@
-<%= @original_content %>
-<% if !@cookie_domain.empty? -%>
+<?php
 
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor', 100);
+ini_set('session.gc_maxlifetime', 200000);
+ini_set('session.cookie_lifetime', 2000000);
+
+$databases['default']['default'] = array(
+	'driver' => '<%= @dbdriver %>',
+	'database' => '<%= @dbname %>',
+	<% if @dbdriver == 'mysql' || @dbdriver == 'pgsql' -%>
+	'username' => '<%= @dbuser %>',
+	'password' => '<%= @dbpass %>',
+	'host' => '<%= @dbhost %>',
+	'port' => <%= @dbport %>,
+		<% if @dbprefix.is_a?(String) -%>
+	'prefix' => '<%= @dbprefix %>',
+		<% else -%>
+	'prefix' => array(
+			<% @dbprefix.each do |table, prefix| -%>
+		'<%= table %>' => '<%= prefix %>',
+			<% end -%>
+	),
+		<% end -%>
+	<% end -%>
+);
+$update_free_access = FALSE;
+$drupal_hash_salt = '<%= @hash_salt %>';
+<% if !@cookie_domain.empty? -%>
 $cookie_domain = '<%= @cookie_domain %>';
 <% end -%>
-<% if @db_prefix.is_a?(Hash) -%>
-
-$databases['default']['default']['prefix'] = array(
-    <% @db_prefix.each do |table, prefix| -%>
-    '<%= table %>' => '<%= prefix %>',
-    <% end -%>
+<% if !@readonly_variables.empty? -%>
+	<% @readonly_variables.each do |name, value| -%>
+		<% if !!value == value =%>
+$conf['<%= name %>'] = <%= value ? 'true' : 'false' %>;
+		<% elsif value.is_a?(Array) -%>
+$conf['<%= name %>'] = array(
+			<% value.each do |row| %>
+	'<%= row %>',
+			<% end -%>
 );
+		<% elsif value.is_a?(Hash) -%>
+$conf['<%= name %>'] = array(
+			<% value.each do |key, data| %>
+	'<%= key %>' => '<%= data %>',
+			<% end -%>
+);
+		<% else -%>
+$conf['<%= name %>'] = '<%= value %>';
+		<% end -%>
+	<% end -%>
+<% end -%>
+<% if @fast_404 -%>
+drupal_fast_404();
 <% end -%>
