@@ -16,7 +16,7 @@ attribute :dbname, :kind_of => String, :required => true
 attribute :dbuser, :kind_of => String, :default => ''
 attribute :dbpass, :kind_of => String, :default => ''
 attribute :dbhost, :kind_of => String, :default => ''
-attribute :dbport, :kind_of => Integer, :default => 3306
+attribute :dbport, :kind_of => [String, Integer], :default => 3306
 attribute :dbprefix, :kind_of => [String, Hash], :default => ''
 attribute :hash_salt, :kind_of => String, :required => true
 attribute :cookie_domain, :kind_of => String, :default => ''
